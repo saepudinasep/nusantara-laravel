@@ -2,6 +2,7 @@ import { PropsWithChildren, ReactNode, useEffect, useState } from "react";
 import { Link, router, usePage } from "@inertiajs/react";
 import { LogOut, Menu, User as UserIcon, X } from "lucide-react";
 import type { User } from "@/types";
+import Swal from "sweetalert2";
 
 export interface SidebarMenuItem {
     label: string;
@@ -67,8 +68,44 @@ export default function SidebarLayout({
         .join("")
         .toUpperCase();
 
+    const roleConfirmColor: Record<RoleKey, string> = {
+        admin: "#7c3aed", // violet-600
+        teacher: "#0d9488", // teal-600
+        student: "#2563eb", // blue-600
+    };
+
     const handleLogout = () => {
-        router.post(route("logout"));
+        Swal.fire({
+            title: "Keluar dari akun?",
+            text: "Anda akan diarahkan kembali ke halaman login.",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonText: "Ya, keluar",
+            cancelButtonText: "Batal",
+            confirmButtonColor: roleConfirmColor[role],
+            cancelButtonColor: "#6b7280",
+            reverseButtons: true,
+        }).then((result) => {
+            if (result.isConfirmed) {
+                router.post(
+                    route("logout"),
+                    {},
+                    {
+                        onSuccess: () => {
+                            Swal.fire({
+                                toast: true,
+                                position: "top-end",
+                                icon: "success",
+                                title: "Berhasil keluar",
+                                showConfirmButton: false,
+                                timer: 2000,
+                                timerProgressBar: true,
+                            });
+                        },
+                    },
+                );
+            }
+        });
     };
 
     // Tutup sidebar otomatis setiap kali pindah halaman (khusus tampilan mobile)
