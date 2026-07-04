@@ -87,7 +87,7 @@ export default function SidebarLayout({
             },
             {
                 label: "Data Guru",
-                href: "#",
+                href: route("admin.teachers.index"),
                 icon: <GraduationCap size={18} />,
             },
             { label: "Data Siswa", href: "#", icon: <Users size={18} /> },
