@@ -14,34 +14,67 @@ use Inertia\Response;
 class ProfileController extends Controller
 {
     /**
-     * Display the user's profile form.
+     * Tampilkan halaman edit profile.
+     * Field tambahan (phone_number, date_of_birth, gender, address, photo)
+     * hanya dikirim kalau user punya relasi teacher/student.
      */
     public function edit(Request $request): Response
     {
+        $user = $request->user();
+
         return Inertia::render('Profile/Edit', [
-            'mustVerifyEmail' => $request->user() instanceof MustVerifyEmail,
+            'mustVerifyEmail' => $user instanceof MustVerifyEmail,
             'status' => session('status'),
+            'profileDetail' => match (true) {
+                $user->hasRole('teacher') => $user->teacher,
+                $user->hasRole('student') => $user->student,
+                default => null,
+            },
         ]);
     }
 
     /**
-     * Update the user's profile information.
+     * Update data profile (name, email) + data role-specific (teacher/student).
      */
     public function update(ProfileUpdateRequest $request): RedirectResponse
     {
-        $request->user()->fill($request->validated());
+        $user = $request->user();
+        $user->fill($request->validated());
 
-        if ($request->user()->isDirty('email')) {
-            $request->user()->email_verified_at = null;
+        if ($user->isDirty('email')) {
+            $user->email_verified_at = null;
         }
 
-        $request->user()->save();
+        $user->save();
+
+        // Update data tambahan sesuai role
+        if ($user->hasRole('teacher')) {
+            $user->teacher()->updateOrCreate(
+                ['user_id' => $user->id],
+                $request->validate([
+                    'phone_number' => ['nullable', 'string', 'max:20'],
+                    'date_of_birth' => ['nullable', 'date'],
+                    'gender' => ['nullable', 'in:L,P'],
+                    'address' => ['nullable', 'string'],
+                ])
+            );
+        } elseif ($user->hasRole('student')) {
+            $user->student()->updateOrCreate(
+                ['user_id' => $user->id],
+                $request->validate([
+                    'phone_number' => ['nullable', 'string', 'max:20'],
+                    'date_of_birth' => ['nullable', 'date'],
+                    'gender' => ['nullable', 'in:L,P'],
+                    'address' => ['nullable', 'string'],
+                ])
+            );
+        }
 
         return Redirect::route('profile.edit');
     }
 
     /**
-     * Delete the user's account.
+     * Hapus akun user (beserta data teacher/student jika ada, via cascade FK).
      */
     public function destroy(Request $request): RedirectResponse
     {
