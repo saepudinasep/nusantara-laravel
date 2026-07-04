@@ -1,20 +1,11 @@
 import SidebarLayout, { SidebarMenuItem } from "@/Layouts/SidebarLayout";
 import { Head } from "@inertiajs/react";
-import {
-    LayoutDashboard,
-    GraduationCap,
-    Users,
-    School,
-    CalendarCheck,
-    FileBarChart,
-} from "lucide-react";
+import { LayoutDashboard, BookOpen, Award, School } from "lucide-react";
 
 interface Stats {
-    total_teacher: number;
-    total_student: number;
-    total_class: number;
-    schedule_finalized: number;
-    schedule_draft: number;
+    total_subject: number;
+    average_score: number;
+    class_name: string;
 }
 
 interface Activity {
@@ -30,51 +21,38 @@ interface Props {
 const menus: SidebarMenuItem[] = [
     {
         label: "Dashboard",
-        href: route("admin.dashboard"),
+        href: route("student.dashboard"),
         icon: <LayoutDashboard size={18} />,
         active: true,
     },
-    { label: "Data Guru", href: "#", icon: <GraduationCap size={18} /> },
-    { label: "Data Siswa", href: "#", icon: <Users size={18} /> },
-    { label: "Data Kelas", href: "#", icon: <School size={18} /> },
-    { label: "Jadwal Pelajaran", href: "#", icon: <CalendarCheck size={18} /> },
-    { label: "Laporan Nilai", href: "#", icon: <FileBarChart size={18} /> },
+    { label: "Nilai Saya", href: "#", icon: <Award size={18} /> },
+    { label: "Jadwal Kelas", href: "#", icon: <BookOpen size={18} /> },
 ];
 
 export default function Dashboard({ stats, recentActivities }: Props) {
     const cards = [
         {
-            label: "Total Guru",
-            value: stats.total_teacher,
-            icon: <GraduationCap size={18} className="text-violet-500" />,
+            label: "Kelas",
+            value: stats.class_name,
+            icon: <School size={18} className="text-blue-500" />,
         },
         {
-            label: "Total Siswa",
-            value: stats.total_student,
-            icon: <Users size={18} className="text-violet-500" />,
+            label: "Mata Pelajaran",
+            value: stats.total_subject,
+            icon: <BookOpen size={18} className="text-blue-500" />,
         },
         {
-            label: "Total Kelas",
-            value: stats.total_class,
-            icon: <School size={18} className="text-violet-500" />,
-        },
-        {
-            label: "Jadwal Final",
-            value: stats.schedule_finalized,
-            icon: <CalendarCheck size={18} className="text-violet-500" />,
-        },
-        {
-            label: "Jadwal Draft",
-            value: stats.schedule_draft,
-            icon: <CalendarCheck size={18} className="text-violet-500" />,
+            label: "Rata-rata Nilai",
+            value: stats.average_score,
+            icon: <Award size={18} className="text-blue-500" />,
         },
     ];
 
     return (
-        <SidebarLayout role="admin" pageTitle="Dashboard Admin" menus={menus}>
-            <Head title="Dashboard Admin" />
+        <SidebarLayout role="student" pageTitle="Dashboard Siswa" menus={menus}>
+            <Head title="Dashboard Siswa" />
 
-            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-5">
+            <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
                 {cards.map((card) => (
                     <div
                         key={card.label}
@@ -86,7 +64,7 @@ export default function Dashboard({ stats, recentActivities }: Props) {
                             </p>
                             {card.icon}
                         </div>
-                        <p className="mt-2 text-2xl font-bold text-violet-500">
+                        <p className="mt-2 text-2xl font-bold text-blue-500">
                             {card.value}
                         </p>
                     </div>

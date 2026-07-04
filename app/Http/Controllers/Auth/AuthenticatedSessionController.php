@@ -36,8 +36,8 @@ class AuthenticatedSessionController extends Controller
 
         $routeName = match (true) {
             $user?->hasRole('admin') => 'admin.dashboard',
-            $user?->hasRole('staff') => 'staff.dashboard',
-            $user?->hasRole('user') => 'user.dashboard',
+            $user?->hasRole('teacher') => 'teacher.dashboard',
+            $user?->hasRole('student') => 'student.dashboard',
             default => 'dashboard',
         };
 

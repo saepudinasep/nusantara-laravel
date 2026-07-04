@@ -10,7 +10,7 @@ export interface SidebarMenuItem {
     active?: boolean;
 }
 
-type RoleKey = "admin" | "staff" | "user";
+type RoleKey = "admin" | "teacher" | "student";
 
 interface RoleTheme {
     label: string;
@@ -28,15 +28,15 @@ const ROLE_THEME: Record<RoleKey, RoleTheme> = {
         accentBgSoft: "bg-violet-500/10",
         accentRing: "ring-violet-500/40",
     },
-    staff: {
-        label: "Staff",
+    teacher: {
+        label: "Guru",
         accentText: "text-teal-400",
         accentBg: "bg-teal-500",
         accentBgSoft: "bg-teal-500/10",
         accentRing: "ring-teal-500/40",
     },
-    user: {
-        label: "Pengguna",
+    student: {
+        label: "Siswa",
         accentText: "text-blue-400",
         accentBg: "bg-blue-500",
         accentBgSoft: "bg-blue-500/10",

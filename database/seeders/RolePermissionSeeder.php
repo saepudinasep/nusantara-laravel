@@ -10,31 +10,63 @@ use Spatie\Permission\Models\Role;
 class RolePermissionSeeder extends Seeder
 {
     /**
-     * Run the database seeds.
+     * Daftar permission per role.
+     * Mengikuti pola: satu seeder mendefinisikan seluruh role & permission,
+     * lalu setiap role diberi permission sesuai kebutuhan modulnya.
      */
     public function run(): void
     {
-        // Permissions
+        // Reset cache permission agar tidak ada data lama yang nyangkut
+        app()[\Spatie\Permission\PermissionRegistrar::class]->forgetCachedPermissions();
+
         $permissions = [
-            'manage users',
+            // Admin
+            'manage teacher',
+            'manage siswa',
             'view dashboard admin',
-            'manage staff data',
-            'view dashboard staff',
-            'view own data',
-            'view dashboard user',
+            'manage schedule',
+            'manage class',
+            'finalize schedule',
+            'view report score',
+
+            // Teacher
+            'manage nilai',
+            'view dashboard teacher',
+            'teaching schedule',
+
+            // Student
+            'view nilai sendiri',
+            'view dashboard student',
+            'class schedule',
         ];
-        foreach ($permissions as $perm) {
-            Permission::firstOrCreate(['name' => $perm]);
+
+        foreach ($permissions as $permission) {
+            Permission::firstOrCreate(['name' => $permission]);
         }
 
-        // Roles + assign permission
         $admin = Role::firstOrCreate(['name' => 'admin']);
-        $admin->givePermissionTo(['manage users', 'view dashboard admin']);
+        $admin->syncPermissions([
+            'manage teacher',
+            'manage siswa',
+            'view dashboard admin',
+            'manage schedule',
+            'manage class',
+            'finalize schedule',
+            'view report score',
+        ]);
 
-        $staff = Role::firstOrCreate(['name' => 'staff']);
-        $staff->givePermissionTo(['manage staff data', 'view dashboard staff']);
+        $teacher = Role::firstOrCreate(['name' => 'teacher']);
+        $teacher->syncPermissions([
+            'manage nilai',
+            'view dashboard teacher',
+            'teaching schedule',
+        ]);
 
-        $user = Role::firstOrCreate(['name' => 'user']);
-        $user->givePermissionTo(['view own data', 'view dashboard user']);
+        $student = Role::firstOrCreate(['name' => 'student']);
+        $student->syncPermissions([
+            'view nilai sendiri',
+            'view dashboard student',
+            'class schedule',
+        ]);
     }
 }
