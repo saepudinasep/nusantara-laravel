@@ -1,6 +1,21 @@
 import { PropsWithChildren, ReactNode, useEffect, useState } from "react";
 import { Link, router, usePage } from "@inertiajs/react";
-import { LogOut, Menu, User as UserIcon, X } from "lucide-react";
+import {
+    LogOut,
+    Menu,
+    User as UserIcon,
+    X,
+    LayoutDashboard,
+    GraduationCap,
+    Users,
+    School,
+    CalendarCheck,
+    FileBarChart,
+    CalendarClock,
+    BookOpen,
+    ClipboardCheck,
+    Award,
+} from "lucide-react";
 import type { User } from "@/types";
 import Swal from "sweetalert2";
 
@@ -46,9 +61,9 @@ const ROLE_THEME: Record<RoleKey, RoleTheme> = {
 };
 
 interface SidebarLayoutProps {
-    role: RoleKey;
+    role?: RoleKey;
     pageTitle: string;
-    menus: SidebarMenuItem[];
+    menus?: SidebarMenuItem[];
 }
 
 export default function SidebarLayout({
@@ -58,7 +73,65 @@ export default function SidebarLayout({
     children,
 }: PropsWithChildren<SidebarLayoutProps>) {
     const { auth } = usePage<{ auth: { user: User } }>().props;
-    const theme = ROLE_THEME[role];
+
+    const authRole = (auth.user as any).roles?.[0]?.name as RoleKey | undefined;
+    const effectiveRole: RoleKey = authRole ?? role ?? "student";
+    const theme = ROLE_THEME[effectiveRole];
+
+    const DEFAULT_MENUS: Record<RoleKey, SidebarMenuItem[]> = {
+        admin: [
+            {
+                label: "Dashboard",
+                href: route("admin.dashboard"),
+                icon: <LayoutDashboard size={18} />,
+            },
+            {
+                label: "Data Guru",
+                href: "#",
+                icon: <GraduationCap size={18} />,
+            },
+            { label: "Data Siswa", href: "#", icon: <Users size={18} /> },
+            { label: "Data Kelas", href: "#", icon: <School size={18} /> },
+            {
+                label: "Jadwal Pelajaran",
+                href: "#",
+                icon: <CalendarCheck size={18} />,
+            },
+            {
+                label: "Laporan Nilai",
+                href: "#",
+                icon: <FileBarChart size={18} />,
+            },
+        ],
+        teacher: [
+            {
+                label: "Dashboard",
+                href: route("teacher.dashboard"),
+                icon: <LayoutDashboard size={18} />,
+            },
+            {
+                label: "Jadwal Mengajar",
+                href: "#",
+                icon: <CalendarClock size={18} />,
+            },
+            {
+                label: "Input Nilai",
+                href: "#",
+                icon: <ClipboardCheck size={18} />,
+            },
+        ],
+        student: [
+            {
+                label: "Dashboard",
+                href: route("student.dashboard"),
+                icon: <LayoutDashboard size={18} />,
+            },
+            { label: "Nilai Saya", href: "#", icon: <Award size={18} /> },
+            { label: "Jadwal Kelas", href: "#", icon: <BookOpen size={18} /> },
+        ],
+    };
+
+    const renderedMenus = DEFAULT_MENUS[effectiveRole];
     const [sidebarOpen, setSidebarOpen] = useState(false);
 
     const initials = auth.user.name
@@ -82,7 +155,7 @@ export default function SidebarLayout({
             showCancelButton: true,
             confirmButtonText: "Ya, keluar",
             cancelButtonText: "Batal",
-            confirmButtonColor: roleConfirmColor[role],
+            confirmButtonColor: roleConfirmColor[effectiveRole],
             cancelButtonColor: "#6b7280",
             reverseButtons: true,
         }).then((result) => {
@@ -163,7 +236,7 @@ export default function SidebarLayout({
 
                     {/* Menu */}
                     <nav className="space-y-1 px-3">
-                        {menus.map((item) => (
+                        {renderedMenus.map((item) => (
                             <Link
                                 key={item.href}
                                 href={item.href}
