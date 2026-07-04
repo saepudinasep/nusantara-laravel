@@ -34,8 +34,16 @@ const menus: SidebarMenuItem[] = [
         icon: <LayoutDashboard size={18} />,
         active: true,
     },
-    { label: "Data Guru", href: "#", icon: <GraduationCap size={18} /> },
-    { label: "Data Siswa", href: "#", icon: <Users size={18} /> },
+    {
+        label: "Data Guru",
+        href: route("admin.teachers.index"),
+        icon: <GraduationCap size={18} />,
+    },
+    {
+        label: "Data Siswa",
+        href: route("admin.students.index"),
+        icon: <Users size={18} />,
+    },
     { label: "Data Kelas", href: "#", icon: <School size={18} /> },
     { label: "Jadwal Pelajaran", href: "#", icon: <CalendarCheck size={18} /> },
     { label: "Laporan Nilai", href: "#", icon: <FileBarChart size={18} /> },

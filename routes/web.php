@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\StudentController;
 use App\Http\Controllers\TeacherController;
 use App\Models\User;
 use Illuminate\Foundation\Application;
@@ -44,6 +45,7 @@ Route::middleware('auth')->group(function () {
 Route::middleware(['auth', 'verified', 'role:admin'])->prefix('admin')->name('admin.')->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'admin'])->name('dashboard');
     Route::resource('teachers', TeacherController::class)->except(['show']);
+    Route::resource('students', StudentController::class)->except(['show']);
 });
 
 Route::middleware(['auth', 'verified', 'role:teacher'])->prefix('teacher')->name('teacher.')->group(function () {

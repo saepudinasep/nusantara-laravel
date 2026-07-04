@@ -90,7 +90,11 @@ export default function SidebarLayout({
                 href: route("admin.teachers.index"),
                 icon: <GraduationCap size={18} />,
             },
-            { label: "Data Siswa", href: "#", icon: <Users size={18} /> },
+            {
+                label: "Data Siswa",
+                href: route("admin.students.index"),
+                icon: <Users size={18} />,
+            },
             { label: "Data Kelas", href: "#", icon: <School size={18} /> },
             {
                 label: "Jadwal Pelajaran",

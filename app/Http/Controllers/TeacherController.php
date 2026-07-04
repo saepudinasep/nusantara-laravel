@@ -4,8 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Teacher;
 use App\Models\User;
-use DB;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Storage;
