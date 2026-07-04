@@ -90,7 +90,7 @@ export default function Edit({
                     </div>
                 </div>
 
-                <div className="rounded-xl border border-red-200 bg-red-50/40 p-6 shadow-sm">
+                {/* <div className="rounded-xl border border-red-200 bg-red-50/40 p-6 shadow-sm">
                     <h2 className="text-base font-semibold text-red-700">
                         Hapus Akun
                     </h2>
@@ -103,7 +103,7 @@ export default function Edit({
                     <div className="mt-6">
                         <DeleteUserForm className="max-w-xl" />
                     </div>
-                </div>
+                </div> */}
             </div>
         </SidebarLayout>
     );

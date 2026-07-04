@@ -70,7 +70,7 @@ class ProfileController extends Controller
             );
         }
 
-        return Redirect::route('profile.edit');
+        return Redirect::route('profile.edit')->with('status', 'Profil berhasil diperbarui.');
     }
 
     /**

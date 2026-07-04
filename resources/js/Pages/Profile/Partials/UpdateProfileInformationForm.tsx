@@ -1,7 +1,8 @@
 import InputError from "@/Components/InputError";
 import { Link, useForm, usePage } from "@inertiajs/react";
 import { Transition } from "@headlessui/react";
-import { FormEventHandler } from "react";
+import { FormEventHandler, useEffect } from "react";
+import Swal from "sweetalert2";
 import {
     User as UserIcon,
     Mail,
@@ -33,6 +34,20 @@ export default function UpdateProfileInformationForm({
 }) {
     const user = usePage().props.auth.user as any;
 
+    useEffect(() => {
+        if (status) {
+            Swal.fire({
+                toast: true,
+                position: "top-end",
+                icon: "success",
+                title: status,
+                showConfirmButton: false,
+                timer: 2000,
+                timerProgressBar: true,
+            });
+        }
+    }, [status]);
+
     const { data, setData, patch, errors, processing, recentlySuccessful } =
         useForm({
             name: user.name,
@@ -45,7 +60,21 @@ export default function UpdateProfileInformationForm({
 
     const submit: FormEventHandler = (e) => {
         e.preventDefault();
-        patch(route("profile.update"));
+
+        Swal.fire({
+            title: "Yakin ingin memperbarui data?",
+            text: "Perubahan akan disimpan ke akun Anda.",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonText: "Ya, perbarui",
+            cancelButtonText: "Batal",
+            reverseButtons: true,
+            confirmButtonColor: "#7c3aed",
+        }).then((result) => {
+            if (result.isConfirmed) {
+                patch(route("profile.update"));
+            }
+        });
     };
 
     const hasExtraFields = role === "teacher" || role === "student";
