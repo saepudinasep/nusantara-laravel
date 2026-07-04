@@ -100,7 +100,7 @@ export default function SidebarLayout({
                                 className={`h-2.5 w-2.5 rounded-full ${theme.accentBg}`}
                             />
                             <span className="text-[15px] font-semibold tracking-tight text-white">
-                                Presline
+                                SMK Nusantara
                             </span>
                         </div>
                         {/* Tombol tutup, hanya tampil di mobile */}
