@@ -79,8 +79,8 @@ class StudentController extends Controller
 
         DB::transaction(function () use ($data, $request, $classId) {
             // Buatkan akun login untuk siswa.
-            $email = $data['email'] ?? Str::slug($data['name']) . '.' . time() . '@example.com';
-            $password = Str::random(12);
+            $email = $data['email'] ?? Str::slug($data['name']) . '.' . time() . '@test.com';
+            $password = "password";
 
             $user = User::create([
                 'name' => $data['name'],

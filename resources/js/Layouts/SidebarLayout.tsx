@@ -95,7 +95,11 @@ export default function SidebarLayout({
                 href: route("admin.students.index"),
                 icon: <Users size={18} />,
             },
-            { label: "Data Kelas", href: "#", icon: <School size={18} /> },
+            {
+                label: "Data Kelas",
+                href: route("admin.classes.index"),
+                icon: <School size={18} />,
+            },
             {
                 label: "Jadwal Pelajaran",
                 href: "#",

@@ -33,9 +33,13 @@ const menus: SidebarMenuItem[] = [
         label: "Data Siswa",
         href: route("admin.students.index"),
         icon: <Users size={18} />,
+    },
+    {
+        label: "Data Kelas",
+        href: route("admin.classes.index"),
+        icon: <School size={18} />,
         active: true,
     },
-    { label: "Data Kelas", href: "#", icon: <School size={18} /> },
     { label: "Jadwal Pelajaran", href: "#", icon: <CalendarCheck size={18} /> },
     { label: "Laporan Nilai", href: "#", icon: <FileBarChart size={18} /> },
 ];
